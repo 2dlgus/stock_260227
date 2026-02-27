@@ -29,7 +29,6 @@ html, body {
   font-family: 'Space Grotesk', sans-serif;
   min-height: 100vh;
   width: 100%;
-  overflow-x: hidden;
 }
 
 #app {
@@ -149,8 +148,8 @@ html, body {
 .sc-price  { font-size: clamp(16px,4.5vw,21px); font-weight:800; font-family:'JetBrains Mono',monospace; margin-bottom:4px; }
 .sc-reason { font-size:9px; color:#aaa; line-height:1.45; }
 
-/* ── 2-COL GRID (tablet+) ── */
-.two-col { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+/* ── 2-COL GRID: 기본 1열, 600px+ 에서 2열 ── */
+.two-col { display:grid; grid-template-columns:1fr; gap:10px; }
 
 /* ── STATS ── */
 .stat-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid #0f0f1e; gap:8px; }
@@ -163,8 +162,8 @@ html, body {
 .ftags { display:flex; flex-wrap:wrap; gap:4px; }
 .ftag  { font-size:9px; padding:3px 6px; border-radius:5px; background:rgba(255,255,255,0.05); font-family:'JetBrains Mono',monospace; }
 
-/* ── COMPARISON ── */
-.cmp-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-top:10px; }
+/* ── COMPARISON: 기본 1열, 600px+ 에서 3열 ── */
+.cmp-cards { display:grid; grid-template-columns:1fr; gap:9px; margin-top:10px; }
 .cmp-card {
   padding:13px; background:var(--bg2); border:1px solid var(--bd);
   border-radius:11px; cursor:pointer; transition:all .2s;
@@ -187,38 +186,42 @@ html, body {
 }
 
 /* ══════════════════════════════
-   BREAKPOINTS
+   BREAKPOINTS  (Mobile First)
 ══════════════════════════════ */
 
-/* TABLET: 601 ~ 900 */
-@media(min-width:601px) and (max-width:900px){
+/* 기본(모바일 전체): 시나리오 가로스크롤, 1열 레이아웃 */
+.hdr-note { display:none; }
+.scenarios {
+  grid-template-columns: repeat(3, minmax(128px, 1fr));
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.scenarios::-webkit-scrollbar { display:none; }
+.radar-box { height:155px; }
+
+/* 600px 이상: 2열/3열 ON */
+@media(min-width:600px){
+  .hdr-note  { display:block; }
+  .two-col   { grid-template-columns:1fr 1fr; }
+  .cmp-cards { grid-template-columns:repeat(3,1fr); }
+  .radar-box { height:170px; }
+  .scenarios {
+    grid-template-columns: repeat(3,1fr);
+    overflow-x: visible;
+  }
   .hdr, .tabs, .sect { padding-left:20px; padding-right:20px; }
 }
 
-/* PC: 901+ */
+/* 901px 이상: PC 여백 */
 @media(min-width:901px){
   .hdr, .tabs, .sect { padding-left:28px; padding-right:28px; }
-  .scenarios { gap:9px; }
-  .sc-lbl { font-size:9px; }
+  .sc-lbl    { font-size:9px; }
   .sc-reason { font-size:10px; }
 }
 
-/* MOBILE: ~480px  → 시나리오 가로스크롤 */
-@media(max-width:480px){
-  .hdr-note { display:none; }
-  .scenarios {
-    grid-template-columns: repeat(3, minmax(130px,1fr));
-    overflow-x: auto; -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px; scrollbar-width:none;
-    gap: 7px;
-  }
-  .scenarios::-webkit-scrollbar { display:none; }
-  .two-col { grid-template-columns:1fr; }
-  .cmp-cards { grid-template-columns:1fr; }
-  .radar-box { height:155px; }
-}
-
-/* TINY: ~360px */
+/* 극소형 360px 미만 */
 @media(max-width:360px){
   .sec-badge { display:none; }
   .tab-badge { display:none; }
